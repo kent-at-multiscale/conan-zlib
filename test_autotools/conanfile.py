@@ -10,7 +10,7 @@ class AutotoolsZlibUser(conans.ConanFile):
     """
     settings = 'os', 'compiler', 'build_type', 'arch'
     exports_sources = 'Makefile.am', 'configure.ac', 'src/Makefile.am', 'src/main.cpp', 'm4/*'
-    requires = 'zlib/1.2.11-1@kent_at_multiscale/stable'
+    requires = 'zlib/1.2.11@kent_at_multiscale/stable'
     generators = 'env', 'txt'
     
     def system_requirements(self):

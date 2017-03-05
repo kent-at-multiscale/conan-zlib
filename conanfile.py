@@ -17,7 +17,7 @@ class ZlibConan(conans.ConanFile):
     external_version_patch = 11
     external_version = '%s.%s.%s' % (external_version_major, external_version_minor, external_version_patch)
     external_tag = 'release-%s' % (external_version)
-    version = '%s-1' % external_version
+    version = '%s' % external_version
     description = 'The zlib library.'
     url = 'git@github.com:kent-at-multiscale/conan-zlib.git'
     license = 'http://zlib.net/zlib_license.html'

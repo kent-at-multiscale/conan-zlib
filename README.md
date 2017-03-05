@@ -10,7 +10,7 @@ To use this library in your own project that makes use of Conan, add this line t
 
 ```text
 [requires]
-zlib/1.2.11-1@kent_at_multiscale/stable
+zlib/1.2.11@kent_at_multiscale/stable
 ```
 
 If you are using the Python configuration file `conanfile.py`:
@@ -19,7 +19,7 @@ If you are using the Python configuration file `conanfile.py`:
 import conans
 
 class YourProject(conan.ConanFile):
-    requires = 'zlib/1.2.11-1@kent_at_multiscale/stable'
+    requires = 'zlib/1.2.11@kent_at_multiscale/stable'
 ```
 
 Then perform a `conan install` once in your project to pull down the dependency.  You may safely re-run this step at will, but it is only necessary when you change your dependencies.  It is not required for every build.
