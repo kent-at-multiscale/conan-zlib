@@ -16,13 +16,12 @@ class ZlibConan(conans.ConanFile):
     external_version_minor = 2
     external_version_patch = 11
     external_version = '%s.%s.%s' % (external_version_major, external_version_minor, external_version_patch)
-    external_tag = 'release-%s' % (external_version)
+    external_tag = 'v%s' % (external_version)
     version = '%s' % external_version
     description = 'The zlib library.'
     url = 'git@github.com:kent-at-multiscale/conan-zlib.git'
     license = 'http://zlib.net/zlib_license.html'
     author = 'Kent Rosenkoetter <kent.rosenkoetter@multiscalehn.com>'
-    # no exports
     settings = 'os', 'compiler', 'build_type', 'arch'
     generators = 'env'
     options = {
@@ -53,7 +52,7 @@ class ZlibConan(conans.ConanFile):
                 self.output.warn('Unable to bootstrap required build tools.  If they are already installed, you can ignore this warning.')
     
     def source(self):
-#         self.run('git clone https://github.com/madler/zlib.git -b v1.2.10')
+#         self.run('git clone https://github.com/madler/zlib.git -b %s' % (self.external_tag))
         zip_name = 'zlib-1.2.11.tar.gz'
         conans.tools.download('http://zlib.net/%s' % zip_name, zip_name)
         conans.tools.check_sha256(zip_name, 'c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1')
@@ -68,20 +67,15 @@ class ZlibConan(conans.ConanFile):
         rpath = []
         if conans.tools.os_info.is_macos:
             rpath.append('@loader_path/')
-            rpath.append('@executable_path/../lib')
         elif conans.tools.os_info.is_windows:
             pass
         else:
-            rpath.append('\\$$ORIGIN/../lib')
+            pass
         
         for p in rpath:
             build_env.link_flags.append('-Wl,-rpath,%s' % (p))
         
-        self.output.info('rpath: %s' % (' '.join('-Wl,-rpath,%s' % p for p in rpath)))
-        
         vars = build_env.vars
-        
-        vars['PATH'] = os.pathsep.join([os.path.join(os.path.realpath(os.curdir), 'bin'), os.path.expandvars('${PATH}')])
         
 #         conan_storage_path = conans.client.client_cache.ConanClientConfigParser.storage_path
         # TODO: Replace this with the already-configured storage path in Conan
@@ -101,6 +95,8 @@ class ZlibConan(conans.ConanFile):
         if self.settings.build_type == 'Debug':
             configure_flags.append('--debug')
         
+        configure_flags.append('--warn')
+        
         cpu_count = conans.tools.cpu_count()
         self.output.info('Detected %s cores.' % (cpu_count))
         
@@ -113,7 +109,7 @@ class ZlibConan(conans.ConanFile):
         with conans.tools.environment_append(vars):
             # TODO: check for Windows and run appropriately
             self.output.info('Configuring')
-            self.run('%s --prefix="%s" --warn %s' % (os.path.join(os.curdir, 'configure'), self.package_folder, ' '.join(configure_flags)), cwd='zlib')
+            self.run('%s --prefix="%s" %s' % (os.path.join(os.curdir, 'configure'), self.package_folder, ' '.join(configure_flags)), cwd='zlib')
             
             self.output.info('Compiling')
             self.run('make -j%s' % (cpu_count), cwd='zlib')

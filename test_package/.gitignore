@@ -1,0 +1,15 @@
+/bin/
+/build/
+/CMakeFiles/
+/lib/
+/Testing/
+/cmake_install.cmake
+/CMakeCache.txt
+/conan_imports_manifest.txt
+/conanbuildinfo.cmake
+/conanbuildinfo.txt
+/conanenv.txt
+/conanfile.pyc
+/conaninfo.txt
+/CTestTestfile.cmake
+/Makefile

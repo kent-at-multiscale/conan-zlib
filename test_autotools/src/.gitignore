@@ -1,0 +1,7 @@
+/.deps/
+/main_c
+/main_c-main.o
+/main_cpp
+/main_cpp-main.o
+/Makefile
+/Makefile.in

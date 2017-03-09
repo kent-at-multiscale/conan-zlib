@@ -23,7 +23,6 @@ class ConanZlibUser(conans.ConanFile):
                 self.output.warn('Unable to bootstrap required build tools.  If they are already installed, you can ignore this warning.')
     
     def imports(self):
-        self.copy(pattern='*', dst='bin', src='bin')
         if conans.tools.os_info.is_windows:
             self.copy(pattern='*.dll', dst='bin', src='bin')
         elif conans.tools.os_info.is_macos:
@@ -35,30 +34,21 @@ class ConanZlibUser(conans.ConanFile):
     def build(self):
         cmake = conans.CMake(self.settings)
         
-        cmake_flags = []
+        args = []
+        vars = {}
         if self.scope.verbose:
-            cmake_flags.append('-DCMAKE_VERBOSE_MAKEFILE=ON')
+            vars['CMAKE_VERBOSE_MAKEFILE'] = 'ON'
         else:
-            cmake_flags.append('-DCMAKE_VERBOSE_MAKEFILE=OFF')
+            vars['CMAKE_VERBOSE_MAKEFILE'] = 'OFF'
         
         cpu_count = conans.tools.cpu_count()
-        self.output.info('Detected %s CPUs' % cpu_count)
+        self.output.info('Detected %s CPUs' % (cpu_count))
         
         self.output.info('Creating build scripts')
-        self.run('cmake "%s" %s %s' % (self.conanfile_directory, cmake.command_line, ' '.join(cmake_flags)))
+        cmake.configure(self, args, vars)
         
         self.output.info('Compiling')
-        self.run('cmake --build "%s" %s -- -j%s' % (os.curdir, cmake.build_config, cpu_count))
-        
-        if self.scope.dev:
-            self.output.info('Dumping object information')
-            executable = os.path.join(os.curdir, 'bin', 'main')
-            if conans.tools.os_info.is_windows:
-                pass
-            elif conans.tools.os_info.is_macos:
-                self.run('otool -l %s' % executable)
-            else:
-                self.run('objdump -x %s' % executable)
+        cmake.build(self, ['--', '-j%s' % (cpu_count)])
         
         self.output.info('Running tests')
         self.run('ctest --parallel %s' % (cpu_count))

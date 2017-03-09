@@ -27,7 +27,6 @@ class AutotoolsZlibUser(conans.ConanFile):
                 self.output.warn('Unable to bootstrap required build tools.  If they are already installed, you can ignore this warning.')
     
     def imports(self):
-        self.copy(pattern='*', dst='bin', src='bin')
         if conans.tools.os_info.is_windows:
             self.copy(pattern='*.dll', dst='bin', src='bin')
         elif conans.tools.os_info.is_macos:
@@ -66,8 +65,6 @@ class AutotoolsZlibUser(conans.ConanFile):
         for p in rpath:
             build_env.link_flags.append('-Wl,-rpath,%s' % (p))
         
-        self.output.info('rpath: %s' % (' '.join('-Wl,-rpath,%s' % p for p in rpath)))
-        
         vars = build_env.vars
         
         vars['PATH'] = os.pathsep.join([os.path.join(os.path.realpath(os.curdir), 'bin'), os.path.expandvars('${PATH}')])
@@ -93,21 +90,12 @@ class AutotoolsZlibUser(conans.ConanFile):
             self.output.info('Compiling')
             self.run('make -j%s' % (cpu_count))
             
-            executables = [os.path.join(os.curdir, 'src', 'main')]
-            if self.scope.dev:
-                self.output.info('Dumping object information')
-                for executable in executables:
-                    if conans.tools.os_info.is_windows:
-                        pass
-                    elif conans.tools.os_info.is_macos:
-                        self.run('otool -l %s' % executable)
-                    else:
-                        self.run('objdump -x %s' % executable)
-            
-            self.output.info('Running test')
-            self.run('%s' % (executable))
+            self.output.info('Running tests')
+            executables = [os.path.join(os.curdir, 'src', 'main_c'), os.path.join(os.curdir, 'src', 'main_cpp')]
+            for executable in executables:
+                self.run('%s' % (executable))
     
     def test(self):
-        executables = [os.path.join(os.curdir, 'src', 'main')]
+        executables = [os.path.join(os.curdir, 'src', 'main_c'), os.path.join(os.curdir, 'src', 'main_cpp')]
         for executable in executables:
             self.run('%s' % (executable))

@@ -5,6 +5,8 @@ AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_FILES([Makefile src/Makefile])
 
 # Checks for programs.
+AC_PROG_CC
+AC_PROG_CC_STDC
 AC_PROG_CXX
 
 # Checks for libraries.
