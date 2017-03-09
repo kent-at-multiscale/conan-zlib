@@ -123,7 +123,7 @@ You will need to set up a couple of environment variables in order to build prop
 ```bash
 CONAN_USER_HOME=~
 PKG_CONFIG=pkg-config --define-variable conan_storage_path=${CONAN_USER_HOME}/.conan/data
-PKG_CONFIG_PATH=${CONAN_USER_HOME}/.conan/data/zlib/1.2.11-12/multiscalehn/stable/package/${PACKAGE_ID}/lib/pkgconfig
+PKG_CONFIG_PATH=${CONAN_USER_HOME}/.conan/data/zlib/1.2.11/kent_at_multiscale/stable/package/${PACKAGE_ID}/lib/pkgconfig
 ```
 
 You can set all of these things much more easily if you use `conanfile.py` and define your own `build` method:
