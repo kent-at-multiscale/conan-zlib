@@ -9,7 +9,7 @@ class AutotoolsZlibUser(conans.ConanFile):
     This uses Autoconf and Automake to build.
     """
     settings = 'os', 'compiler', 'build_type', 'arch'
-    exports_sources = 'Makefile.am', 'configure.ac', 'src/Makefile.am', 'src/main.cpp', 'm4/*'
+    exports_sources = 'Makefile.am', 'configure.ac', 'src/Makefile.am', 'src/main.c', 'src/main.cpp', 'm4/*'
     requires = 'zlib/1.2.11@kent_at_multiscale/stable'
     generators = 'env', 'txt'
     
