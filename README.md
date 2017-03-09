@@ -211,7 +211,6 @@ bin_PROGRAMS = your_executable
 your_executable_SOURCES = your_source.cpp
 your_executable_CXXFLAGS = $(ZLIB_CFLAGS)
 your_executable_LDADD = $(ZLIB_LIBS)
-your_executable_LDFLAGS = -Wl,-rpath,@executable_path/../lib -Wl,-rpath,\$$ORIGIN/../lib
 ```
 
 Technically this does not actually use the Conan integration directly.  However, it does make use of the `zlib.pc` file included in the package.
