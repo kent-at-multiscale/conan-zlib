@@ -213,7 +213,15 @@ class ZlibConan(conans.ConanFile):
                                         if not flag in self.cpp_info.cppflags:
                                             self.cpp_info.cppflags.append(flag)
         
+        for includedir in self.cpp_info.includedirs:
+            self.output.info('%s include dir: %s' % (self.name, includedir))
         self.output.info('%s libs: %s' % (self.name, self.cpp_info.libs))
+        for libdir in self.cpp_info.libdirs:
+            self.output.info('%s lib dir: %s' % (self.name, libdir))
+        for resdir in self.cpp_info.resdirs:
+            self.output.info('%s resource dir: %s' % (self.name, resdir))
+        for bindir in self.cpp_info.bindirs:
+            self.output.info('%s bin dir: %s' % (self.name, bindir))
         self.output.info('%s defines: %s' % (self.name, self.cpp_info.defines))
         self.output.info('%s cflags: %s' % (self.name, self.cpp_info.cflags))
         self.output.info('%s cppflags: %s' % (self.name, self.cpp_info.cppflags))
